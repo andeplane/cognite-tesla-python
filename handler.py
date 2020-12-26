@@ -35,6 +35,9 @@ def handle_data_point(data_point):
     if type(value) not in [str, float, int]:
         return None
 
+    if key == "inside_temp":
+        print(data_point)
+
     return data_point
 
 async def handle_data(data):
@@ -76,7 +79,7 @@ def handle(client, secrets):
     while datetime.utcnow() < ends_at:
         now = datetime.utcnow()
         data_points = asyncio.run(main(secrets["tesla-password"]))
-        if len(data_points) > 0:
+        if data_points and len(data_points) > 0:
             client.datapoints.insert_multiple(data_points)
         formatted_date = now.strftime("%d/%m/%y %H:%M:%S")
         print(f"{formatted_date}: Inserted {len(data_points)} data points")
@@ -84,4 +87,4 @@ def handle(client, secrets):
     
 if __name__ == "__main__":
     client = CogniteClient(project="andershaf", api_key=os.environ["COGNITE_API_KEY_ANDERSHAF"])
-    handle(client, {"tesla_password": os.environ["TESLA_PASSWORD"]})
+    handle(client, {"tesla-password": os.environ["TESLA_PASSWORD"]})
