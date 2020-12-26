@@ -1,0 +1,2 @@
+aiohttp==3.7.3
+cognite-sdk==2.10.4
